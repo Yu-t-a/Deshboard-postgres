@@ -6,5 +6,8 @@
 หรือเปลี่ยน owner เป็น user ของคุณ:
 ```
 sudo chown -R $USER:$USER /Deshboard-postgres
+or
+sudo chown -R $USER:$USER .
+
 sudo code .
 ```
