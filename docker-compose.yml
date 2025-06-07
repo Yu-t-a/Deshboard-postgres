@@ -1,0 +1,135 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: sap_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: sap_system
+      POSTGRES_USER: sap_admin
+      POSTGRES_PASSWORD: sap_password123
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+      - ./backups:/backups
+    networks:
+      - sap_network
+    command: >
+      postgres 
+      -c max_connections=200
+      -c shared_buffers=256MB
+      -c work_mem=4MB
+      -c maintenance_work_mem=64MB
+      -c effective_cache_size=1GB
+
+  # pgAdmin4
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: sap_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "8080:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - sap_network
+    depends_on:
+      - postgres
+
+  # Frontend - React + Vite
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: app_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost/api
+    depends_on:
+      - backend
+    networks:
+      - sap_network
+
+  # Backend - Node.js + Express
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: app_backend
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=sap_postgres
+      - DB_PORT=5432
+      - DB_NAME=sap_system
+      - DB_USER=sap_admin
+      - DB_PASSWORD=sap_password123
+    depends_on:
+      - postgres
+    networks:
+      - sap_network
+
+  # Nginx - Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: app_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d:ro
+    depends_on:
+      - frontend
+      - backend
+      - pgadmin
+    networks:
+      - sap_network
+    command: |
+      /bin/sh -c "
+      echo 'server {
+        listen 80;
+        location / {
+          proxy_pass http://react_frontend:3000;
+          proxy_set_header Host \$host;
+        }
+        location /api/ {
+          proxy_pass http://node_backend:4000/;
+          proxy_set_header Host \$host;
+        }
+        location /pgadmin/ {
+          proxy_pass http://pgadmin_web:80/;
+          proxy_set_header Host \$host;
+          proxy_set_header X-Script-Name /pgadmin;
+        }
+      }' > /etc/nginx/conf.d/default.conf &&
+      nginx-debug -g 'daemon off;'
+      "
+
+networks:
+  sap_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+  frontend_node_modules:
+  backend_node_modules:
