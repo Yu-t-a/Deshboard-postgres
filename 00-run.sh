@@ -90,7 +90,10 @@ EOF
 npm create vite@latest frontend -- --template react
 cd frontend
 npm install
+
 npm install react-router-dom
+npm install recharts
+npm install @tanstack/react-table
 
 npm install -D tailwindcss@3.4.1 postcss autoprefixer
 npx tailwindcss init -p
