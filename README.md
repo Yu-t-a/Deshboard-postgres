@@ -148,3 +148,19 @@ git config --global core.autocrlf input
 
 git add .
 ```
+
+# Step 01
+Run file .sh
+```
+./00-run.sh
+```
+cp fullstack-docker-app
+```
+./dev.sh
+```
+# Step end
+Frontend: http://localhost
+
+Backend API: http://localhost:3050
+
+pgAdmin: http://localhost:5050
