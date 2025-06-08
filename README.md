@@ -165,7 +165,7 @@ Backend API: http://localhost:3050
 
 pgAdmin: http://localhost:5050
 
-Edid file on vscode Ubuntu
+Edit file on vscode Ubuntu
 ```
 sudo chown -R $USER:$USER .
 ```
