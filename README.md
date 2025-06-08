@@ -96,48 +96,55 @@ Expected output should confirm that:
 **Status: Docker installed and verified successfully.**
 
 # ติดตั้ง Node.js v22.x LTS บน Ubuntu
+ติดตั้ง nvm
+```
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash
+source ~/.bashrc   # หรือ source ~/.zshrc ขึ้นกับ shell ที่ใช้
 
-คู่มือนี้จะแนะนำวิธีติดตั้ง Node.js v22.x LTS บน Ubuntu โดยใช้ NodeSource ซึ่งเป็นวิธีที่ง่ายและรวดเร็วในการติดตั้ง Node เวอร์ชันล่าสุด
-
-## ขั้นตอนการติดตั้ง
-
-### 1. ลบ Node.js เวอร์ชันเก่า (ถ้ามี)
-
-```bash
-sudo apt remove nodejs -y
 ```
 
-### 2. เพิ่ม NodeSource Repository สำหรับ Node.js v22.x
-
-```bash
-curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+เช็คเวอร์ชัน Node ที่ติดตั้งอยู่ ด้วยคำสั่ง
+```
+nvm ls
+```
+ลบเวอร์ชัน Node ที่ต้องการ (เช่น v21.0.0) ด้วยคำสั่ง
+```
+nvm uninstall 21.0.0
+```
+ถ้าอยากลบ NVM ทั้งหมด (รวม Node ทุกเวอร์ชันและตัว NVM เอง) ให้ลบโฟลเดอร์ NVM และลบคำสั่งโหลด NVM จากไฟล์ config shell เช่น .bashrc, .zshrc
+```
+rm -rf ~/.nvm
+```
+ตัวอย่าง
+```
+nvm ls
+->      v21.0.0
+       v22.14.0
+default -> lts/* (-> N/A)
+iojs -> N/A (default)
 ```
 
-### 3. ติดตั้ง Node.js
-
-```bash
-sudo apt-get install -y nodejs
+1. ลบ Node.js เวอร์ชันที่ติดตั้งทั้งหมดผ่าน nvm
+```
+nvm uninstall 21.0.0
+nvm uninstall 22.14.0
+```
+2. ติดตั้ง Node.js v22.14.0 ใหม่
+```
+nvm install 22.14.0
+```
+3. ตั้งให้ v22.14.0 เป็น default version
+```
+nvm alias default 22.14.0
+```
+Update npm
+```
+npm install -g npm@11.3.0
 ```
 
-### 4. ตรวจสอบเวอร์ชันที่ติดตั้ง
-
-```bash
-node -v
-npm -v
+การแปลงรูปแบบ line ending ระหว่างระบบ Unix (Linux/macOS ใช้ LF) และ Windows (ใช้ CRLF) เมื่อใช้ Git บน Windows
 ```
+git config --global core.autocrlf input
 
-> คำสั่งด้านบนจะแสดงเวอร์ชันของ Node.js และ npm ที่ถูกติดตั้ง เช่น `v22.1.6` และ `10.x.x`
-
-## หมายเหตุเพิ่มเติม
-
-* หากต้องการจัดการ Node.js หลายเวอร์ชันบนเครื่องเดียว สามารถใช้ `nvm (Node Version Manager)` แทนการติดตั้งแบบนี้ได้
-* Node.js v22 เป็นเวอร์ชัน LTS (Long Term Support) เหมาะสำหรับใช้งานใน production
-
-## แหล่งอ้างอิง
-
-* NodeSource: [https://github.com/nodesource/distributions](https://github.com/nodesource/distributions)
-* Node.js LTS Schedule: [https://nodejs.org/en/about/releases/](https://nodejs.org/en/about/releases/)
-
----
-
-**จัดทำโดย:** Yu
+git add .
+```
