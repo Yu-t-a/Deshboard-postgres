@@ -114,7 +114,7 @@ git config --global core.autocrlf input
 git add .
 ```
 
-# Step 01
+# Step start
 Run file .sh
 ```
 chmod +x 00-run.sh
@@ -150,6 +150,16 @@ fullstack-docker-app
 │   ├── tailwind.config.js
 │   └── vite.config.js
 └── init_tables.sql
+```
+# Complete 
+```
+✅ Project created successfully!
+📁 Directory: fullstack-docker-app
+🚀 To start development environment: ./dev.sh
+🌐 Access points:
+   Frontend: http://localhost
+   Backend API: http://localhost:3050
+   pgAdmin: http://localhost:5050
 ```
 # Step end
 Frontend: http://localhost
