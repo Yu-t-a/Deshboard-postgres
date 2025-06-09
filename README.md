@@ -172,6 +172,8 @@ Edit file on vscode Ubuntu
 ```
 sudo chown -R $USER:$USER .
 ```
+Image : 
+![หน้าตาโปรแกรม](Screenshot.png)
 
 Delete container
 ```
