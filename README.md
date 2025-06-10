@@ -25,6 +25,10 @@ sudo apt-get purge -y docker* containerd runc
 sudo rm -rf /var/lib/docker /etc/docker /var/run/docker.sock
 sudo groupdel docker
 sudo apt-get autoremove -y && sudo apt-get autoclean
+
+or
+chmod +x remove_docker.sh
+sudo ./remove_docker.sh
 ```
 
 ---
@@ -32,31 +36,23 @@ sudo apt-get autoremove -y && sudo apt-get autoclean
 ## 🐳 Install Docker (Official Docker Engine)
 
 ### Step 1: Install dependencies
-```bash
-sudo apt-get update
-sudo apt-get install -y ca-certificates curl gnupg lsb-release
-```
-
-### Step 2: Add Docker's GPG key and repository
-```bash
-sudo mkdir -m 0755 -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
-  sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-
-echo \
-  "deb [arch=$(dpkg --print-architecture) \
-  signed-by=/etc/apt/keyrings/docker.gpg] \
-  https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-```
-
-### Step 3: Install Docker Engine and plugins
+แนะนำ: ใช้ apt install docker.io หรือ ติดตั้งจาก Docker official repo
+หากไม่ต้องการยุ่งกับ Snap หรือ Podman
 ```bash
 sudo apt update
-sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt install docker.io docker-compose-plugin
+```
 
+### หรือถ้าต้องการเวอร์ชันล่าสุด:
+```bash
+# ติดตั้ง Docker จาก official repo (ทาง Docker แนะนำวิธีนี้)
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+```
+
+### Step 3: อย่าลืมเพิ่ม user เข้า group docker เพื่อไม่ต้องใช้ sudo ทุกครั้ง:
+```bash
+sudo usermod -aG docker $USER
 ```
 
 ### Step 4: Add current user to docker group
