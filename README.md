@@ -68,6 +68,28 @@ sudo docker run hello-world
 
 ```
 
+# ลบ Node ที่ติดตั้งผ่าน apt (กรณีติดตั้งจาก apt repository)
+```
+sudo apt remove nodejs
+sudo apt purge nodejs
+sudo apt autoremove
+```
+
+# รันคำสั่งนี้เพื่อติดตั้ง nvm:
+```
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+```
+โหลด nvm เข้าสู่ shell (ใช้ zsh):
+```
+source ~/.zshrc
+or
+source ~/.bashrc
+```
+ตรวจสอบว่า nvm ติดตั้งสำเร็จ:
+```
+command -v nvm
+```
+
 ---
 
 ## 🚀 Install Node.js v22.x LTS with NVM
